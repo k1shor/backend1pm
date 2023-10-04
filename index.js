@@ -23,6 +23,8 @@ const express = require('express')
 require('dotenv').config()
 require('./database/connection')
 
+const morgan = require('morgan')
+const cors = require('cors')
 
 
 // creating server
@@ -37,14 +39,22 @@ const port = process.env.PORT || 8000
 // })
 
 app.use(express.json())
-
+app.use(morgan('dev'))
+app.use(cors())
 
 // routes
 const categoryRoute = require('./routes/categoryRoute')
-
+const productRoute = require('./routes/productRoute')
+const userRoute = require('./routes/userRoute')
+const orderRoute = require('./routes/orderRoute')
 
 // adding to the pipeline
-app.use(categoryRoute)
+app.use('/category',categoryRoute)
+app.use('/product',productRoute)
+app.use('/user',userRoute)
+app.use('/order',orderRoute)
+
+app.use('/public/uploads',express.static('public/uploads'))
 
 // starting server
 app.listen(port,()=>{
